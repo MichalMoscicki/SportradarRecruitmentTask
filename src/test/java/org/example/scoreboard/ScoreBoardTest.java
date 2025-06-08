@@ -2,6 +2,7 @@ package org.example.scoreboard;
 
 import org.example.exception.ScoreBoardException;
 import org.example.model.Match;
+import org.example.model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -94,11 +95,36 @@ class ScoreBoardTest {
         assertEquals(0, match.getHostTeamScore());
         assertEquals(0, match.getGuestTeamScore());
         assertNotNull(match.getCreateDate());
+        assertTrue(((ScoreBoardImpl) scoreBoard).getOngoingMatches().contains(match));
     }
 
+    @Test
+    void endGame_shouldRemoveMatch1() {
+        String hostTeam = "Bulgaria";
+        String guestTeam = "Japan";
+        Match match = scoreBoard.startGame(hostTeam, guestTeam);
+        scoreBoard.endGame(match);
+        assertFalse(((ScoreBoardImpl) scoreBoard).getOngoingMatches().contains(match));
+    }
 
     @Test
-    void endGame() {
+    void endGame_shouldRemoveMatch2() {
+        String hostTeam = "Bulgaria";
+        String guestTeam = "Japan";
+        Match match = scoreBoard.startGame(hostTeam, guestTeam);
+        scoreBoard.endGame(match);
+        assertFalse(((ScoreBoardImpl) scoreBoard).getOngoingMatches().contains(match));
+        scoreBoard.endGame(match);
+        assertFalse(((ScoreBoardImpl) scoreBoard).getOngoingMatches().contains(match));
+    }
+
+    @Test
+    void endGame_shouldRemoveMatch3() {
+        String hostTeam = "Bulgaria";
+        String guestTeam = "Japan";
+        Match match = new Match(new Team(hostTeam), new Team(guestTeam));
+        scoreBoard.endGame(match);
+        assertFalse(((ScoreBoardImpl) scoreBoard).getOngoingMatches().contains(match));
     }
 
     @Test

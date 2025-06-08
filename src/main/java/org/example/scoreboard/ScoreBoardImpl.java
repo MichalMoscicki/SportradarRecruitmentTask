@@ -15,10 +15,6 @@ class ScoreBoardImpl implements ScoreBoard {
     private ScoreBoardImpl() {
     }
 
-    protected void clearBoard() {
-        this.ongoingMatches.clear();;
-    }
-
     public static ScoreBoardImpl getInstance() {
         if (instance == null) {
             instance = new ScoreBoardImpl();
@@ -26,9 +22,16 @@ class ScoreBoardImpl implements ScoreBoard {
         return instance;
     }
 
+    protected void clearBoard() {
+        this.ongoingMatches.clear();;
+    }
+
+    protected List<Match> getOngoingMatches() {
+        return this.ongoingMatches;
+    }
+
     @Override
     public Match startGame(String hostTeam, String guestTeam) {
-        //todo trimmowanie
         validate(hostTeam, guestTeam);
         Match match = new Match(new Team(hostTeam), new Team(guestTeam));
         ongoingMatches.add(match);
@@ -66,7 +69,7 @@ class ScoreBoardImpl implements ScoreBoard {
 
     @Override
     public void endGame(Match match) {
-        // implementation
+        ongoingMatches.remove(match);
     }
 
     @Override
