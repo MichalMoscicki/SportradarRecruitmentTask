@@ -20,32 +20,24 @@ public class Match {
         return hostTeam;
     }
 
-    public void setHostTeam(Team hostTeam) {
-        this.hostTeam = hostTeam;
-    }
-
     public Team getGuestTeam() {
         return guestTeam;
-    }
-
-    public void setGuestTeam(Team guestTeam) {
-        this.guestTeam = guestTeam;
     }
 
     public int getHostTeamScore() {
         return hostTeamScore;
     }
 
-    public void setHostTeamScore(int hostTeamScore) {
-        this.hostTeamScore = hostTeamScore;
+    public void increaseHostTeamScore() {
+        this.hostTeamScore ++;
     }
 
     public int getGuestTeamScore() {
         return guestTeamScore;
     }
 
-    public void setGuestTeamScore(int guestTeamScore) {
-        this.guestTeamScore = guestTeamScore;
+    public void increaseGuestTeamScore() {
+        this.guestTeamScore ++;
     }
 
     public LocalDate getCreateDate() {

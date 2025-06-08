@@ -128,6 +128,29 @@ class ScoreBoardTest {
     }
 
     @Test
-    void updateScore() {
+    void updateScore_shouldReturnError_NoOngoingMatch() {
+        String hostTeam1 = "Bulgaria";
+        String guestTeam1 = "Japan";
+        String message = "No ongoing match between " + hostTeam1 + " and " + guestTeam1;
+
+        Match match = scoreBoard.startGame(hostTeam1, guestTeam1);
+        scoreBoard.endGame(match);
+        match.increaseGuestTeamScore();
+
+        Exception exception = assertThrows(ScoreBoardException.class, () -> scoreBoard.updateScore(match));
+        assertEquals(message, exception.getMessage());
     }
+
+    @Test
+    void updateScore_scoreUpdated() {
+        String hostTeam1 = "Bulgaria";
+        String guestTeam1 = "Japan";
+
+        Match match = scoreBoard.startGame(hostTeam1, guestTeam1);
+        match.increaseGuestTeamScore();
+        scoreBoard.updateScore(match);
+        assertEquals(((ScoreBoardImpl) scoreBoard).getOngoingMatches().getFirst().getGuestTeamScore(), match.getGuestTeamScore());
+
+    }
+
 }

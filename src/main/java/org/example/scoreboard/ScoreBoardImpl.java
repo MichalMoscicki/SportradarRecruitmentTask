@@ -6,11 +6,12 @@ import org.example.model.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class ScoreBoardImpl implements ScoreBoard {
 
     private static ScoreBoardImpl instance;
-    private List<Match> ongoingMatches = new ArrayList<>();
+    private final List<Match> ongoingMatches = new ArrayList<>();
 
     private ScoreBoardImpl() {
     }
@@ -73,8 +74,15 @@ class ScoreBoardImpl implements ScoreBoard {
     }
 
     @Override
-    public void updateScore(Match match) {
-
+    public void updateScore(Match matchParam) {
+        Optional<Match> matchOptional = ongoingMatches.stream()
+                .filter(m -> m.getHostTeam().equals(matchParam.getHostTeam()) && m.getGuestTeam().equals(matchParam.getGuestTeam())).findFirst();
+        if (matchOptional.isEmpty()) {
+            throw new ScoreBoardException("No ongoing match between " + matchParam.getHostTeam().getName() + " and " + matchParam.getGuestTeam().getName());
+        } else {
+            ongoingMatches.remove(matchOptional.get());
+            ongoingMatches.add(matchParam);
+        }
     }
 
     @Override
