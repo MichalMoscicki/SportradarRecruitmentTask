@@ -5,6 +5,7 @@ import org.example.model.Match;
 import org.example.model.Team;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,8 @@ class ScoreBoardImpl implements ScoreBoard {
     }
 
     protected void clearBoard() {
-        this.ongoingMatches.clear();;
+        this.ongoingMatches.clear();
+        ;
     }
 
     protected List<Match> getOngoingMatches() {
@@ -80,13 +82,16 @@ class ScoreBoardImpl implements ScoreBoard {
         if (matchOptional.isEmpty()) {
             throw new ScoreBoardException("No ongoing match between " + matchParam.getHostTeam().getName() + " and " + matchParam.getGuestTeam().getName());
         } else {
-            ongoingMatches.remove(matchOptional.get());
-            ongoingMatches.add(matchParam);
+            Match existingMatch = matchOptional.get();
+            existingMatch.merge(matchParam);
         }
     }
 
     @Override
-    public void getSummary() {
-        // implementation
+    public List<Match> getSummary() {
+        ongoingMatches.sort(Comparator
+                .comparingInt((Match m) -> m.getHostTeamScore() + m.getGuestTeamScore()).reversed()
+                .thenComparing(m -> m.getCreateDate()));
+        return ongoingMatches;
     }
 }

@@ -1,19 +1,19 @@
 package org.example.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Match {
 
     private Team hostTeam;
     private Team guestTeam;
-    private int hostTeamScore= 0;
+    private int hostTeamScore = 0;
     private int guestTeamScore = 0;
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     public Match(Team hostTeam, Team guestTeam) {
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
-        createDate = LocalDate.now();
+        createDate = LocalDateTime.now();
     }
 
     public Team getHostTeam() {
@@ -29,7 +29,7 @@ public class Match {
     }
 
     public void increaseHostTeamScore() {
-        this.hostTeamScore ++;
+        this.hostTeamScore++;
     }
 
     public int getGuestTeamScore() {
@@ -37,14 +37,16 @@ public class Match {
     }
 
     public void increaseGuestTeamScore() {
-        this.guestTeamScore ++;
+        this.guestTeamScore++;
     }
 
-    public LocalDate getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
+    public void merge(Match matchParam) {
+        this.hostTeamScore = matchParam.getHostTeamScore();
+        this.guestTeamScore = matchParam.getGuestTeamScore();
     }
+
 }

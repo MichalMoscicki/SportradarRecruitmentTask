@@ -6,6 +6,9 @@ import org.example.model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScoreBoardTest {
@@ -149,8 +152,69 @@ class ScoreBoardTest {
         Match match = scoreBoard.startGame(hostTeam1, guestTeam1);
         match.increaseGuestTeamScore();
         scoreBoard.updateScore(match);
-        assertEquals(((ScoreBoardImpl) scoreBoard).getOngoingMatches().getFirst().getGuestTeamScore(), match.getGuestTeamScore());
 
+        assertEquals(((ScoreBoardImpl) scoreBoard).getOngoingMatches().getFirst().getGuestTeamScore(), match.getGuestTeamScore());
+    }
+
+    @Test
+    void getSummary_differentScores() {
+        Match match1 = scoreBoard.startGame("Bulgaria", "Japan");
+        Match match2 = scoreBoard.startGame("Poland", "Germany");
+        Match match3 = scoreBoard.startGame("Lithuania", "Spain");
+
+        match1.increaseGuestTeamScore();
+        scoreBoard.updateScore(match1);
+
+        match3.increaseGuestTeamScore();
+        match3.increaseHostTeamScore();
+        scoreBoard.updateScore(match1);
+
+        List<Match> properOrderList = Arrays.asList(match3, match1, match2);
+
+        assertEquals(properOrderList, scoreBoard.getSummary());
+    }
+
+    @Test
+    void getSummary_sameScores() {
+        Match match1 = scoreBoard.startGame("Bulgaria", "Japan");
+        Match match2 = scoreBoard.startGame("Poland", "Germany");
+        Match match3 = scoreBoard.startGame("Turkey", "England");
+
+        match3.increaseHostTeamScore();
+        scoreBoard.updateScore(match3);
+
+        match2.increaseHostTeamScore();
+        scoreBoard.updateScore(match2);
+
+        match1.increaseGuestTeamScore();
+        scoreBoard.updateScore(match1);
+
+        List<Match> properOrderList = Arrays.asList(match1, match2, match3);
+
+        assertEquals(properOrderList, scoreBoard.getSummary());
+    }
+
+    @Test
+    void getSummary_mixedScores() {
+        Match match1 = scoreBoard.startGame("Bulgaria", "Japan");
+        Match match2 = scoreBoard.startGame("Poland", "Germany");
+        Match match3 = scoreBoard.startGame("Turkey", "England");
+        Match match4 = scoreBoard.startGame("Lithuania", "Spain");
+
+
+        match1.increaseGuestTeamScore();
+        scoreBoard.updateScore(match1);
+
+        match3.increaseHostTeamScore();
+        scoreBoard.updateScore(match3);
+
+        match4.increaseGuestTeamScore();
+        match4.increaseHostTeamScore();
+        scoreBoard.updateScore(match1);
+
+        List<Match> properOrderList = Arrays.asList(match4, match1, match3, match2);
+
+        assertEquals(properOrderList, scoreBoard.getSummary());
     }
 
 }
